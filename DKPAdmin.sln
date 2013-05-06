@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogParser", "LogParser\LogParser.csproj", "{767663E6-F81D-4DE4-A208-D1E58A3BACED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminGUI", "AdminGUI\AdminGUI.csproj", "{19B083BA-DC2D-4EFA-9CF3-19D5A237C09B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{767663E6-F81D-4DE4-A208-D1E58A3BACED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{767663E6-F81D-4DE4-A208-D1E58A3BACED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{767663E6-F81D-4DE4-A208-D1E58A3BACED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19B083BA-DC2D-4EFA-9CF3-19D5A237C09B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19B083BA-DC2D-4EFA-9CF3-19D5A237C09B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19B083BA-DC2D-4EFA-9CF3-19D5A237C09B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19B083BA-DC2D-4EFA-9CF3-19D5A237C09B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -81,18 +81,26 @@ namespace LogAnalyzer
                     string name = data.Substring(0, nextOpen);
 
                     // укорачиваем строку
-                    string next = data.Substring(nextOpen + 1, data.Length - nextOpen - 1);
+                    data = data.Substring(nextOpen + 1, data.Length - nextOpen - 1);
 
                     // запускаем на дальнейший анализ
-                    //LuaNode toAdd = AnalyzeLuaString()
+                    LuaNode toAdd = AnalyzeLuaString(ref data);
+
+                    // убиваем закрывающуюся скобку
+                    data = data.Substring(data.IndexOf(@"},") + 2, data.Length - data.IndexOf(@"},") - 2);
 
                     // если в начале было пустое имя, вытаскиваем его из конца
                     if (name == string.Empty)
                     {
-                        
+                        int iO = data.IndexOf(@"-- [") + 4;
+                        int iE = data.IndexOf(@"]");
+                        name = data.Substring(iO, iE - iO);
+
+                        data = data.Substring(data.IndexOf(@"]") + 2, data.Length - data.IndexOf(@"]") - 2);
                     }
 
-                    // и убиваем закрывающуюся скобку
+                    // добавляем узел с указанным именем
+                    result.AddValue(toAdd);
                 }
                 else if (nextComma > 0 && (nextClose == -1 || nextClose > nextComma))// если сначала идет запятая, те у нас строка типа ["name"] = value,
                 {

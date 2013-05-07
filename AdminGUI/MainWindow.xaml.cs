@@ -30,11 +30,14 @@ namespace AdminGUI
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             // пока пусто
-            string inpData = _logParser.ReadFile(@"C:\!Data\GitHub\DKPAdmin\Tests\hagakure.lua");
+            string inpData = _logParser.ReadFile(@"D:\WoW\WTF\Account\N00BE\SavedVariables\hagakure.lua");
+            //string inpData = _logParser.ReadFile(@"C:\!Data\GitHub\DKPAdmin\Tests\hagakure.lua");
 
             string cleanData = _logParser.CleanEmptyChars(inpData);
 
             RichText.Text = cleanData;
+
+            var s = _logParser.AnalyzeLuaString(ref cleanData);
         }
 
         private void Test2_OnClick(object sender, RoutedEventArgs e)

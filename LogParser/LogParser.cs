@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace LogAnalyzer
 {
@@ -11,7 +7,7 @@ namespace LogAnalyzer
     public class LogParser
     {
         /// <summary> значения, которые являются специальным символами / на выброс </summary>
-        private string[] _emptyChars =
+        private readonly string[] _emptyChars =
             {
                 "\r",
                 "\n",
@@ -19,28 +15,6 @@ namespace LogAnalyzer
                 "hagakureDB = {",
                 "\\\""
             };
-
-        /// <summary> читаем данные из файла в строку </summary>
-        /// <param name="path"> путь до файла </param>
-        /// <returns> строка - содержимое файла </returns>
-        public string ReadFile(string path)
-        {
-            var reader = new StreamReader(path, Encoding.UTF8);
-            try
-            {
-                string content = reader.ReadToEnd();
-
-                return content;
-            }
-            catch
-            {
-                return null;
-            }
-            finally
-            {
-                reader.Close();
-            }
-        }
 
         /// <summary> очищает строчку от ненужных символов </summary>
         /// <param name="data">строка для очистки</param>
@@ -71,10 +45,10 @@ namespace LogAnalyzer
                 oldLength = data.Length;
 
                 // ищем первое вхождение } и {
-                int nextClose = data.IndexOf(@"}");
-                int nextOpen = data.IndexOf(@"{");
-                int nextComma = data.IndexOf(@",[");
-                int nextCommaTmp = data.IndexOf(@",}");
+                int nextClose = data.IndexOf(@"}", StringComparison.Ordinal);
+                int nextOpen = data.IndexOf(@"{", StringComparison.Ordinal);
+                int nextComma = data.IndexOf(@",[", StringComparison.Ordinal);
+                int nextCommaTmp = data.IndexOf(@",}", StringComparison.Ordinal);
                 if (nextComma == -1 || (nextComma > nextCommaTmp && nextCommaTmp != -1)) nextComma = nextCommaTmp;
 
                 // сначала надо проверить идет ли сначала закрывающаяся скобка, если так, то надо завершать цикл
@@ -94,17 +68,17 @@ namespace LogAnalyzer
                     // запускаем на дальнейший анализ
                     LuaNode toAdd = AnalyzeLuaString(ref data);
 
-                    if (data.IndexOf(@"},") != 0)
+                    if (data.IndexOf(@"},", StringComparison.Ordinal) != 0)
                         throw new Exception("Some error in parsing!");
 
                     // убиваем закрывающуюся скобку
-                    data = data.Substring(data.IndexOf(@"},") + 2, data.Length - data.IndexOf(@"},") - 2);
+                    data = data.Substring(data.IndexOf(@"},", StringComparison.Ordinal) + 2, data.Length - data.IndexOf(@"},", StringComparison.Ordinal) - 2);
 
                     // если в начале было пустое имя, вытаскиваем его из конца
                     if (name == string.Empty)
                     {
-                        int iO = data.IndexOf(@"-- [") + 4;
-                        int iE = data.IndexOf(@"]");
+                        int iO = data.IndexOf(@"-- [", StringComparison.Ordinal) + 4;
+                        int iE = data.IndexOf(@"]", StringComparison.Ordinal);
                         name = data.Substring(iO, iE - iO);
 
                         data = data.Substring(iE + 1, data.Length - iE - 1);
@@ -124,9 +98,9 @@ namespace LogAnalyzer
                 else if (nextComma > 0 && (nextClose == -1 || nextClose > nextComma))// если сначала идет запятая, те у нас строка типа ["name"] = value,
                 {
                     // у нас выражение типа ["name"] = value,
-                    int nameStarts = data.IndexOf("\"");
-                    int nameEnds = data.IndexOf("\"", nameStarts + 1);
-                    int equalPlace = data.IndexOf(" = ");
+                    int nameStarts = data.IndexOf("\"", StringComparison.Ordinal);
+                    int nameEnds = data.IndexOf("\"", nameStarts + 1, StringComparison.Ordinal);
+                    int equalPlace = data.IndexOf(" = ", StringComparison.Ordinal);
 
                     // если что-то не так выдаем эксепшн
                     if (nameStarts == -1 || nameEnds == -1 || equalPlace == -1)
@@ -184,6 +158,24 @@ namespace LogAnalyzer
             }
 
             return result;
+        }
+
+        /// <summary> ищет в дереве узлов узел с логом и выдает его </summary>
+        /// <param name="data"> распарсенный в дерево .lua </param>
+        /// <param name="nodeName"> имя искомой ветки дерева </param>
+        /// <returns> ветка с именем log </returns>
+        public LuaNode SearchNodeWithName(LuaNode data, string nodeName)
+        {
+            return data.NodeName == nodeName
+                        // если искомая ветка искомая - выдаем ее на результат
+                       ? data
+                       : data.NodeType != LuaNode.LuaNodeType.Node
+                                // если узел не содержит внутри узел то выдаем null
+                             ? null
+                                // иначе надо запустить на проверку каждый его член ^^
+                             : data.GetNodeContent()
+                                   .Select(iNode => SearchNodeWithName(iNode, nodeName))
+                                   .FirstOrDefault(search => search != null);
         }
     }
 }

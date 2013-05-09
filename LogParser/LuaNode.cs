@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace LogAnalyzer
 {
@@ -18,7 +16,7 @@ namespace LogAnalyzer
         public string NodeName;
 
         /// <summary> предопределенные типы для значения узла </summary>
-        public enum LuaNodeType : int
+        public enum LuaNodeType
         {
             String,
             Boolean,
@@ -52,6 +50,56 @@ namespace LogAnalyzer
                         break;
                 }
             }
+        }
+
+        /// <summary> выдает контент типа int </summary>
+        /// <returns> null если контент другого типа </returns>
+        public int? GetIntContent()
+        {
+            if (_type == LuaNodeType.Integer)
+                return (int) _content;
+
+            return null;
+        }
+
+        /// <summary> выдает контент типа List[LuaNode] </summary>
+        /// <returns> null если контент друго типа </returns>
+        public List<LuaNode> GetNodeContent()
+        {
+            if (_type == LuaNodeType.Node)
+                return (List<LuaNode>) _content;
+
+            return new List<LuaNode>();
+        }
+
+        /// <summary> выдает контент типа string </summary>
+        /// <returns> null если контент другого типа </returns>
+        public string GetStringContent()
+        {
+            if (_type == LuaNodeType.String)
+                return (string)_content;
+
+            return null;
+        }
+
+        /// <summary> выдает контент типа boolean </summary>
+        /// <returns> null если контент другого типа </returns>
+        public bool? GetBoolContent()
+        {
+            if (_type == LuaNodeType.String)
+                return (bool)_content;
+
+            return null;
+        }
+
+        /// <summary> выдает контент типа real </summary>
+        /// <returns> null если контент другого типа </returns>
+        public float? GetRealContent()
+        {
+            if (_type == LuaNodeType.String)
+                return (float)_content;
+
+            return null;
         }
 
         #region перегрузка AddValue(value)

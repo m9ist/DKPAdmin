@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -21,6 +22,8 @@ namespace AdminGUI
     public partial class MainWindow : Window
     {
         private LogParser _logParser = new LogParser();
+        //string inpData = @"C:\!Data\GitHub\DKPAdmin\Tests\hagakure.lua";
+        private const string InpData = @"D:\WoW\WTF\Account\N00BE\SavedVariables\hagakure.lua";
 
         public MainWindow()
         {
@@ -29,13 +32,26 @@ namespace AdminGUI
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            // пока пусто
-            string inpData = _logParser.ReadFile(@"D:\WoW\WTF\Account\N00BE\SavedVariables\hagakure.lua");
-            //string inpData = _logParser.ReadFile(@"C:\!Data\GitHub\DKPAdmin\Tests\hagakure.lua");
+            var reader = new StreamReader(InpData, Encoding.UTF8);
+            string content = string.Empty;
+            try
+            {
+                content = reader.ReadToEnd();
+            }
+            finally
+            {
+                reader.Close();
+            }
 
-            string cleanData = _logParser.CleanEmptyChars(inpData);
+            string cleanData = _logParser.CleanEmptyChars(content);
 
-            var s = _logParser.AnalyzeLuaString(ref cleanData);
+            var analizedLog = _logParser.AnalyzeLuaString(ref cleanData);
+
+            // ищем сначала узел faction
+            var search = _logParser.SearchNodeWithName(analizedLog, "faction");
+            // в нем ищем узел log
+            if (search != null)
+                search = _logParser.SearchNodeWithName(search, "log");
         }
 
         private void Test2_OnClick(object sender, RoutedEventArgs e)

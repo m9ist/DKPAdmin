@@ -47,8 +47,10 @@ namespace LogAnalyzer
         /// <returns> очищенная от спец. символов строка </returns>
         public string CleanEmptyChars(string data)
         {
+            // очищаем от спец символов
             string iteration = _emptyChars.Aggregate(data, (current, s) => current.Replace(s, string.Empty));
-
+            
+            // убиваем последний @"{"
             return iteration.Substring(0, iteration.Length - 1);
         }
 
@@ -71,7 +73,13 @@ namespace LogAnalyzer
                 // ищем первое вхождение } и {
                 int nextClose = data.IndexOf(@"}");
                 int nextOpen = data.IndexOf(@"{");
-                int nextComma = data.IndexOf(@",");
+                int nextComma = data.IndexOf(@",[");
+                int nextCommaTmp = data.IndexOf(@",}");
+                if (nextComma == -1 || (nextComma > nextCommaTmp && nextCommaTmp != -1)) nextComma = nextCommaTmp;
+
+                // сначала надо проверить идет ли сначала закрывающаяся скобка, если так, то надо завершать цикл
+                if (nextClose == 0)
+                    break;
 
                 // если открытие идет раньше, то значит текущий узел - это node и надо дальше отдавать на 
                 // распарсинг вычитая начало строки и распарсивая имя если есть
@@ -86,6 +94,9 @@ namespace LogAnalyzer
                     // запускаем на дальнейший анализ
                     LuaNode toAdd = AnalyzeLuaString(ref data);
 
+                    if (data.IndexOf(@"},") != 0)
+                        throw new Exception("Some error in parsing!");
+
                     // убиваем закрывающуюся скобку
                     data = data.Substring(data.IndexOf(@"},") + 2, data.Length - data.IndexOf(@"},") - 2);
 
@@ -96,8 +107,16 @@ namespace LogAnalyzer
                         int iE = data.IndexOf(@"]");
                         name = data.Substring(iO, iE - iO);
 
-                        data = data.Substring(data.IndexOf(@"]") + 2, data.Length - data.IndexOf(@"]") - 2);
+                        data = data.Substring(iE + 1, data.Length - iE - 1);
                     }
+                    else
+                    {
+                        // надо убрать [\" и \"]
+                        name = name.Substring(2, name.Length - 7);
+                    }
+
+                    // добавляем имя
+                    toAdd.NodeName = name;
 
                     // добавляем узел с указанным именем
                     result.AddValue(toAdd);

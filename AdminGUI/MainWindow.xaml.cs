@@ -35,15 +35,13 @@ namespace AdminGUI
 
             string cleanData = _logParser.CleanEmptyChars(inpData);
 
-            RichText.Text = cleanData;
-
             var s = _logParser.AnalyzeLuaString(ref cleanData);
         }
 
         private void Test2_OnClick(object sender, RoutedEventArgs e)
         {
             string inp =
-                "{[\"reason\"] = \"|cffa335ee|Hitem:94821:0:0:0:0:0:0:885497856:90:0:0|h[Разрыватели артерий]|h|r\",[\"t\"] = 1366319194,[\"name\"] = \"Диагноз\",[\"adj\"] = -5,}, -- [69]{[\"reason\"] = \"|cffa335ee|Hitem:95511:0:0:0:0:0:0:885497856:90:0:0|h[Отсеченное щупальце Дуруму]|h|r\",[\"t\"] = 1366319222,[\"name\"] = \"Парасолька\",[\"adj\"] = -11,}, -- [70]";
+                "[\"log\"] = {{[\"m_value\"] = 1,[\"user\"] = \"Эллиандрессе\",[\"t\"] = 1367512961,[\"event\"] = \"онлайн\",[\"s_value\"] = 0,}, -- [1]{[\"m_value\"] = 2,[\"user\"] = \"Эллиандрессе\",[\"t\"] = 1367512976,[\"event\"] = \"онлайн\",[\"s_value\"] = 0,}, -- [2]},";
             var s = _logParser.AnalyzeLuaString(ref inp);
         }
     }

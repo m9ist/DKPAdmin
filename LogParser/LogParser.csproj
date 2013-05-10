@@ -39,7 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LuaNode.cs" />
+    <Compile Include="Structures\LogRecord.cs" />
+    <Compile Include="Structures\LuaNode.cs" />
     <Compile Include="LogParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using LogAnalyzer;
+using LogAnalyzer.Structures;
 
 namespace AdminGUI
 {
@@ -52,6 +53,12 @@ namespace AdminGUI
             // в нем ищем узел log
             if (search != null)
                 search = _logParser.SearchNodeWithName(search, "log");
+
+            var LogRecords = new List<LogRecord>();
+            foreach (var iNode in search.GetNodeContent())
+            {
+                LogRecords.Add(new LogRecord(iNode));
+            }
         }
 
         private void Test2_OnClick(object sender, RoutedEventArgs e)

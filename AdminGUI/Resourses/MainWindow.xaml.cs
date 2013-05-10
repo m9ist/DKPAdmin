@@ -26,9 +26,12 @@ namespace AdminGUI
         //string inpData = @"C:\!Data\GitHub\DKPAdmin\Tests\hagakure.lua";
         private const string InpData = @"D:\WoW\WTF\Account\N00BE\SavedVariables\hagakure.lua";
 
+        private List<LogRecord> _log;
+
         public MainWindow()
         {
             InitializeComponent();
+            _log = new List<LogRecord>();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -54,10 +57,10 @@ namespace AdminGUI
             if (search != null)
                 search = _logParser.SearchNodeWithName(search, "log");
 
-            var LogRecords = new List<LogRecord>();
+            _log = new List<LogRecord>();
             foreach (var iNode in search.GetNodeContent())
             {
-                LogRecords.Add(new LogRecord(iNode));
+                _log.Add(new LogRecord(iNode));
             }
         }
 

@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="AdminGUI.Resourses.LogRecordGUI"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             >
+    <StackPanel Orientation="Horizontal" DataContext="" >
+        <Label x:Name="t" Content="{Binding Path=Time}"  />
+        <Label x:Name="userName" Content="{Binding Path=User}" />
+        <Label x:Name="m_value" Content="{Binding Path=MValue}" />
+        <Label x:Name="s_event" Content="{Binding Path=SEvent}" />
+        <Label x:Name="s_value" Content="{Binding Path=SValue}" />
+    </StackPanel>
+</UserControl>

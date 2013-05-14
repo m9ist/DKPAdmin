@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.ComponentModel;
 
 namespace LogAnalyzer.Structures
 {
     /// <summary> структура, содержащая в себе одну запись лога </summary>
-    public class LogRecord
+    public class LogRecord : INotifyPropertyChanged
     {
         /// <summary> типы события в логе </summary>
         public enum LogEventTypes
         {
-            Roster = 0,
+            Undefined = 0,
             Pass = 1,
             Loot = 2,
             Adj = 3,
@@ -21,12 +19,14 @@ namespace LogAnalyzer.Structures
             RaidEvent = 7,
             Invite = 8,
             Online = 9,
+            Roster = 10,
+            Joined = 11,
         }
 
         /// <summary> сопоставление перечислению LogEventTypes </summary>
         private string[] _logEventTypes =
             {
-                "ростер", 
+                "неопределено",
                 "пасс",
                 "лут",
                 "поправка",
@@ -36,26 +36,82 @@ namespace LogAnalyzer.Structures
                 "рейд",
                 "инв",
                 "онлайн",
+                "ростер", 
+                "присоединился"
             };
 
+        private string _user = string.Empty;
+        private int _mvalue = 0;
+        private string _svalue = string.Empty;
+        private string _sevent = string.Empty;
+        private string _time = string.Empty;
+
+        public LogEventTypes Type { private set; get; }
+
         /// <summary> персонаж - главное лицо записи (либо ростер тут забит) </summary>
-        public string User { get; private set; }
+        public string User
+        {
+            get { return this._user; }
+            private set
+            {
+                OnPropertyChanged("user");
+                this._user = value;
+            }
+        }
+
         /// <summary> зачастую значение поправки </summary>
-        public int MValue { get; private set; }
+        public int MValue
+        {
+            get { return this._mvalue; }
+            private set
+            {
+                OnPropertyChanged("mvalue");
+                this._mvalue = value;
+            }
+        }
+
         /// <summary> текст поправки </summary>
-        public string SValue { get; private set; }
+        public string SValue
+        {
+            get { return this._svalue; }
+            private set
+            {
+                OnPropertyChanged("svalue");
+                this._svalue = value;
+            }
+        }
+
         /// <summary> тип события лога </summary>
-        public string SEvent { get; private set; }
+        public string SEvent
+        {
+            get { return this._sevent; }
+            private set
+            {
+                OnPropertyChanged("sevent");
+                this._sevent = value;
+            }
+        }
+
         /// <summary> время события </summary>
-        public string Time { get; private set; }
+        public string Time
+        {
+            get { return this._time; }
+            private set
+            {
+                OnPropertyChanged("time");
+                this._time = value;
+            }
+        }
 
         /// <summary> создает экземпляр записи лога </summary>
         /// <param name="logNode"> ветка в которой содержится запись лога </param>
         public LogRecord(LuaNode logNode)
         {
+            // проверяем что нам досталось
             if (logNode.NodeType != LuaNode.LuaNodeType.Node)
                 throw new Exception("Wrong input LuaNode, it should be Node type");
 
+            // забиваем наши поля
             foreach (var iNode in logNode.GetNodeContent())
             {
                 switch (iNode.NodeName)
@@ -80,6 +136,21 @@ namespace LogAnalyzer.Structures
                         break;
                 }
             }
+
+            // определяем тип поля
+            for (int i = 0; i < _logEventTypes.Length; i++)
+            {
+                if (_sevent.IndexOf(_logEventTypes[i], StringComparison.InvariantCulture) >= 0)
+                    Type = (LogEventTypes)i;
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -4,17 +4,20 @@
         Title="MainWindow" Height="350" Width="525">
     <ScrollViewer>
         <StackPanel>
-            <Button Content="Blow me" Name="Test1" Click="Button_Click" />
-            <Button Content="Blow me 2" Name="Test2" Click="Test2_OnClick" />
-            <TreeView ItemsSource="_log">
-                <TreeViewItem>
-                    <TreeViewItem.ItemTemplate>
+            <Button Content="Load log" Name="Test1" Click="Button_Click" />
+            <CheckBox Content="See passed items" Name="FilterPass" IsChecked="false" Checked="FilterPassEvent" Unchecked="FilterPassEvent" />
+            <CheckBox Content="See loot items" Name="FilterLoot" IsChecked="false" Checked="FilterPassEvent" Unchecked="FilterPassEvent"/>
+            <CheckBox Content="See adjustments" Name="FilterAdj" IsChecked="false" Checked="FilterPassEvent" Unchecked="FilterPassEvent"/>
+            <CheckBox Content="See logged in/out" Name="FilterLogg" IsChecked="false" Checked="FilterPassEvent" Unchecked="FilterPassEvent"/>
+            <CheckBox Content="Roster changes" Name="FilterRoster" IsChecked="false" Checked="FilterPassEvent" Unchecked="FilterPassEvent"/>
+            <CheckBox Content="Other" Name="FilterOther" IsChecked="false" Checked="FilterPassEvent" Unchecked="FilterPassEvent"/>
+                <ListBox ItemsSource="{Binding}" Name="GuiTree">
+                    <ListBox.ItemTemplate>
                         <DataTemplate>
                             <resourses:LogRecordGUI />
                         </DataTemplate>
-                    </TreeViewItem.ItemTemplate>
-                </TreeViewItem>
-            </TreeView>
+                    </ListBox.ItemTemplate>
+                </ListBox>
         </StackPanel>
     </ScrollViewer>
 </Window>

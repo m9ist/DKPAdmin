@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -22,21 +24,30 @@ namespace AdminGUI
     /// </summary>
     public partial class MainWindow : Window
     {
+        // класс с логикой парсинга файла
         private LogParser _logParser = new LogParser();
-        //string inpData = @"C:\!Data\GitHub\DKPAdmin\Tests\hagakure.lua";
-        private const string InpData = @"D:\WoW\WTF\Account\N00BE\SavedVariables\hagakure.lua";
+        /// <summary> путь до файла .lua </summary>
+        private const string _inpData = @"C:\!Data\GitHub\DKPAdmin\Tests\hagakure.lua";
+        //private const string _inpData = @"D:\WoW\WTF\Account\N00BE\SavedVariables\hagakure.lua";
+        /// <summary> коллекция для хранения загруженного лога </summary>
+        private ObservableCollection<LogRecord> _log;
 
-        private List<LogRecord> _log;
-
+        /// <summary> инициализация окошка </summary>
         public MainWindow()
         {
             InitializeComponent();
-            _log = new List<LogRecord>();
+            _log = new ObservableCollection<LogRecord>();
+            GuiTree.DataContext = _log;
         }
 
+        /// <summary> делегат - обработка нажатия кнопки "загрузить лог" 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var reader = new StreamReader(InpData, Encoding.UTF8);
+            // собственно считываем инфу с файла в строчку
+            var reader = new StreamReader(_inpData, Encoding.UTF8);
             string content = string.Empty;
             try
             {
@@ -47,8 +58,9 @@ namespace AdminGUI
                 reader.Close();
             }
 
+            // очищаем строчку от спец символов
             string cleanData = _logParser.CleanEmptyChars(content);
-
+            // получаем дерево сохраненной информации аддона
             var analizedLog = _logParser.AnalyzeLuaString(ref cleanData);
 
             // ищем сначала узел faction
@@ -56,19 +68,57 @@ namespace AdminGUI
             // в нем ищем узел log
             if (search != null)
                 search = _logParser.SearchNodeWithName(search, "log");
-
-            _log = new List<LogRecord>();
+            // очищаем предыдущую подгрзку если есть и преобразовываем распарсенный лог
+            // в нужный нам вид
+            _log.Clear();
             foreach (var iNode in search.GetNodeContent())
             {
                 _log.Add(new LogRecord(iNode));
             }
+            FilterPassEvent(this, new RoutedEventArgs());
         }
 
-        private void Test2_OnClick(object sender, RoutedEventArgs e)
+        // обработчик фильтра включить/отключить просмотр "пасс" события
+        private void FilterPassEvent(object sender, RoutedEventArgs e)
         {
-            string inp =
-                "[\"log\"] = {{[\"m_value\"] = 1,[\"user\"] = \"Эллиандрессе\",[\"t\"] = 1367512961,[\"event\"] = \"онлайн\",[\"s_value\"] = 0,}, -- [1]{[\"m_value\"] = 2,[\"user\"] = \"Эллиандрессе\",[\"t\"] = 1367512976,[\"event\"] = \"онлайн\",[\"s_value\"] = 0,}, -- [2]},";
-            var s = _logParser.AnalyzeLuaString(ref inp);
+            ICollectionView view = CollectionViewSource.GetDefaultView(_log);
+            if (view != null)
+            {
+                view.Filter = delegate(object item)
+                    {
+                        // проверяем зачекано ли "показывать пасс"
+                        bool filtered = ((LogRecord) item).Type == LogRecord.LogEventTypes.Pass
+                                               ? (bool) FilterPass.IsChecked
+                                               : false;
+                        // зачекано ли "показывать лут"
+                        filtered = ((LogRecord)item).Type == LogRecord.LogEventTypes.Loot
+                                               ? (bool) FilterLoot.IsChecked
+                                               : filtered;
+                        // зачекано ли "показывать поправки"
+                        filtered = ((LogRecord)item).Type == LogRecord.LogEventTypes.Adj
+                                               ? (bool) FilterAdj.IsChecked
+                                               : filtered;
+                        // зачекано ли "показывать разное"
+                        filtered =  ((LogRecord) item).Type == LogRecord.LogEventTypes.Undefined
+                                               ? (bool)FilterOther.IsChecked
+                                               : filtered;
+                        // зачекано ли "показывать входы/выходы из мира"
+                        filtered = ((LogRecord) item).Type == LogRecord.LogEventTypes.Joined
+                                   || ((LogRecord) item).Type == LogRecord.LogEventTypes.LogOutWorld
+                                   || ((LogRecord) item).Type == LogRecord.LogEventTypes.Online
+                                   || ((LogRecord) item).Type == LogRecord.LogEventTypes.RaidEvent
+                                   || ((LogRecord) item).Type == LogRecord.LogEventTypes.RaidMember
+                                   || ((LogRecord) item).Type == LogRecord.LogEventTypes.Joined
+                                       ? (bool) FilterLogg.IsChecked
+                                       : filtered;
+                        // зачекано ли "показывать события ростера"
+                        filtered = ((LogRecord)item).Type == LogRecord.LogEventTypes.Roster
+                                               ? (bool)FilterRoster.IsChecked
+                                               : filtered;
+
+                        return filtered;
+                    };
+            }
         }
     }
 }

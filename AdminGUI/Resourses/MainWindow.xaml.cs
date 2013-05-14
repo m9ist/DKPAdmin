@@ -71,9 +71,18 @@ namespace AdminGUI
             // очищаем предыдущую подгрзку если есть и преобразовываем распарсенный лог
             // в нужный нам вид
             _log.Clear();
+            // переменная под первый timespam
+            int firstTime = 0;
             foreach (var iNode in search.GetNodeContent())
             {
-                _log.Add(new LogRecord(iNode));
+                if (firstTime == 0)
+                {
+                    var rec = new LogRecord(iNode);
+                    firstTime = rec.Time;
+                    _log.Add(rec);
+                }
+                else
+                    _log.Add(new LogRecord(iNode, firstTime));
             }
             FilterPassEvent(this, new RoutedEventArgs());
         }

@@ -7,8 +7,8 @@
     <ProjectGuid>{767663E6-F81D-4DE4-A208-D1E58A3BACED}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LogParser</RootNamespace>
-    <AssemblyName>LogParser</AssemblyName>
+    <RootNamespace>LogAnalyzer</RootNamespace>
+    <AssemblyName>LogAnalyzer</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

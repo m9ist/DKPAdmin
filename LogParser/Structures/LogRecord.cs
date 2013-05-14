@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Globalization;
 
 namespace LogAnalyzer.Structures
 {
@@ -44,7 +45,7 @@ namespace LogAnalyzer.Structures
         private int _mvalue = 0;
         private string _svalue = string.Empty;
         private string _sevent = string.Empty;
-        private string _time = string.Empty;
+        private int _time = 0;
 
         public LogEventTypes Type { private set; get; }
 
@@ -93,7 +94,7 @@ namespace LogAnalyzer.Structures
         }
 
         /// <summary> время события </summary>
-        public string Time
+        public int Time
         {
             get { return this._time; }
             private set
@@ -123,7 +124,7 @@ namespace LogAnalyzer.Structures
                         User = iNode.GetStringContent();
                         break;
                     case "t":
-                        Time = iNode.GetStringContent();
+                        Time = iNode.GetIntContent() ?? 0;
                         break;
                     case "s_value":
                         SValue = iNode.GetStringContent();
@@ -143,6 +144,12 @@ namespace LogAnalyzer.Structures
                 if (_sevent.IndexOf(_logEventTypes[i], StringComparison.InvariantCulture) >= 0)
                     Type = (LogEventTypes)i;
             }
+        }
+
+        public LogRecord(LuaNode logNode, int firstTime)
+            : this(logNode)
+        {
+            Time = Time - firstTime;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

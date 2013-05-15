@@ -1,39 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using LogAnalyzer;
+using LogAnalyzer.Structures;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using LogAnalyzer;
-using LogAnalyzer.Structures;
 
-namespace AdminGUI
+namespace AdminGUI.Resourses
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class WindowManagementLog
     {
         // класс с логикой парсинга файла
-        private LogParser _logParser = new LogParser();
+        private readonly LogParser _logParser = new LogParser();
         /// <summary> путь до файла .lua </summary>
         private const string _inpData = @"C:\!Data\GitHub\DKPAdmin\Tests\hagakure.lua";
         //private const string _inpData = @"D:\WoW\WTF\Account\N00BE\SavedVariables\hagakure.lua";
         /// <summary> коллекция для хранения загруженного лога </summary>
-        private ObservableCollection<LogRecord> _log;
+        private readonly ObservableCollection<LogRecord> _log;
 
         /// <summary> инициализация окошка </summary>
-        public MainWindow()
+        public WindowManagementLog()
         {
             InitializeComponent();
             _log = new ObservableCollection<LogRecord>();
@@ -48,7 +38,7 @@ namespace AdminGUI
         {
             // собственно считываем инфу с файла в строчку
             var reader = new StreamReader(_inpData, Encoding.UTF8);
-            string content = string.Empty;
+            string content;
             try
             {
                 content = reader.ReadToEnd();
@@ -66,8 +56,7 @@ namespace AdminGUI
             // ищем сначала узел faction
             var search = _logParser.SearchNodeWithName(analizedLog, "faction");
             // в нем ищем узел log
-            if (search != null)
-                search = _logParser.SearchNodeWithName(search, "log");
+            search = _logParser.SearchNodeWithName(search, "log");
             // очищаем предыдущую подгрзку если есть и преобразовываем распарсенный лог
             // в нужный нам вид
             _log.Clear();
@@ -96,20 +85,18 @@ namespace AdminGUI
                 view.Filter = delegate(object item)
                     {
                         // проверяем зачекано ли "показывать пасс"
-                        bool filtered = ((LogRecord) item).Type == LogRecord.LogEventTypes.Pass
-                                               ? (bool) FilterPass.IsChecked
-                                               : false;
+                        bool filtered = ((LogRecord) item).Type == LogRecord.LogEventTypes.Pass && (FilterPass.IsChecked ?? false);
                         // зачекано ли "показывать лут"
                         filtered = ((LogRecord)item).Type == LogRecord.LogEventTypes.Loot
-                                               ? (bool) FilterLoot.IsChecked
+                                               ? FilterLoot.IsChecked ?? false
                                                : filtered;
                         // зачекано ли "показывать поправки"
                         filtered = ((LogRecord)item).Type == LogRecord.LogEventTypes.Adj
-                                               ? (bool) FilterAdj.IsChecked
+                                               ? FilterAdj.IsChecked ?? false
                                                : filtered;
                         // зачекано ли "показывать разное"
                         filtered =  ((LogRecord) item).Type == LogRecord.LogEventTypes.Undefined
-                                               ? (bool)FilterOther.IsChecked
+                                               ? FilterOther.IsChecked ?? false
                                                : filtered;
                         // зачекано ли "показывать входы/выходы из мира"
                         filtered = ((LogRecord) item).Type == LogRecord.LogEventTypes.Joined
@@ -118,11 +105,11 @@ namespace AdminGUI
                                    || ((LogRecord) item).Type == LogRecord.LogEventTypes.RaidEvent
                                    || ((LogRecord) item).Type == LogRecord.LogEventTypes.RaidMember
                                    || ((LogRecord) item).Type == LogRecord.LogEventTypes.Joined
-                                       ? (bool) FilterLogg.IsChecked
+                                       ? FilterLogg.IsChecked ?? false
                                        : filtered;
                         // зачекано ли "показывать события ростера"
                         filtered = ((LogRecord)item).Type == LogRecord.LogEventTypes.Roster
-                                               ? (bool)FilterRoster.IsChecked
+                                               ? FilterRoster.IsChecked ?? false
                                                : filtered;
 
                         return filtered;

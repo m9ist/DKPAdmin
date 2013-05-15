@@ -20,7 +20,7 @@ namespace AdminGUI.Resourses
             if (summ == 0)
                 return string.Format("{0}:{1}:{2}", hours, minutes, sec);
             else
-                return string.Format("{3} {0}:{1}:{2}", tmp, minutes, sec, summ/6);
+                return string.Format("{3} {0}:{1}:{2}", tmp, minutes, sec, summ);
             //return 2;
         }
 

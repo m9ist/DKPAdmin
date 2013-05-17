@@ -9,12 +9,24 @@
     <ScrollViewer>
         <StackPanel>
             <Button Content="Load log" Name="Test1" Click="Button_Click" />
-            <CheckBox Content="See passed items" Name="FilterPass" IsChecked="false" Checked="FilterPassEvent" Unchecked="FilterPassEvent" />
-            <CheckBox Content="See loot items" Name="FilterLoot" IsChecked="false" Checked="FilterPassEvent" Unchecked="FilterPassEvent"/>
-            <CheckBox Content="See adjustments" Name="FilterAdj" IsChecked="false" Checked="FilterPassEvent" Unchecked="FilterPassEvent"/>
-            <CheckBox Content="See logged in/out" Name="FilterLogg" IsChecked="false" Checked="FilterPassEvent" Unchecked="FilterPassEvent"/>
-            <CheckBox Content="Roster changes" Name="FilterRoster" IsChecked="false" Checked="FilterPassEvent" Unchecked="FilterPassEvent"/>
-            <CheckBox Content="Other" Name="FilterOther" IsChecked="false" Checked="FilterPassEvent" Unchecked="FilterPassEvent"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <CheckBox Content="See passed items" Name="FilterPass" IsChecked="false" Checked="FilterPassEvent" Unchecked="FilterPassEvent" Grid.Column="0" Grid.Row="0" />
+                <CheckBox Content="See loot items" Name="FilterLoot" IsChecked="false" Checked="FilterPassEvent" Unchecked="FilterPassEvent" Grid.Column="0" Grid.Row="1" />
+                <CheckBox Content="See adjustments" Name="FilterAdj" IsChecked="false" Checked="FilterPassEvent" Unchecked="FilterPassEvent" Grid.Column="0" Grid.Row="2" />
+                <CheckBox Content="See logged in/out" Name="FilterLogg" IsChecked="false" Checked="FilterPassEvent" Unchecked="FilterPassEvent" Grid.Column="1" Grid.Row="0" />
+                <CheckBox Content="Roster changes" Name="FilterRoster" IsChecked="false" Checked="FilterPassEvent" Unchecked="FilterPassEvent" Grid.Column="1" Grid.Row="1" />
+                <CheckBox Content="Other" Name="FilterOther" IsChecked="false" Checked="FilterPassEvent" Unchecked="FilterPassEvent" Grid.Column="1" Grid.Row="2" />
+            </Grid>
             <ListBox ItemsSource="{Binding}" Name="GuiTree">
                 <ListBox.ItemTemplate>
                     <DataTemplate>

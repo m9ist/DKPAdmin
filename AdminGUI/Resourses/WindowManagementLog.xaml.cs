@@ -16,8 +16,10 @@ namespace AdminGUI.Resourses
     {
         // класс с логикой парсинга файла
         private readonly LogParser _logParser = new LogParser();
+
         /// <summary> путь до файла .lua </summary>
         private const string _inpData = @"C:\!Data\GitHub\DKPAdmin\Tests\hagakure.lua";
+
         //private const string _inpData = @"D:\WoW\WTF\Account\N00BE\SavedVariables\hagakure.lua";
         /// <summary> коллекция для хранения загруженного лога </summary>
         private readonly ObservableCollection<LogRecord> _log;
@@ -85,19 +87,20 @@ namespace AdminGUI.Resourses
                 view.Filter = delegate(object item)
                     {
                         // проверяем зачекано ли "показывать пасс"
-                        bool filtered = ((LogRecord) item).Type == LogRecord.LogEventTypes.Pass && (FilterPass.IsChecked ?? false);
+                        bool filtered = ((LogRecord) item).Type == LogRecord.LogEventTypes.Pass &&
+                                        (FilterPass.IsChecked ?? false);
                         // зачекано ли "показывать лут"
-                        filtered = ((LogRecord)item).Type == LogRecord.LogEventTypes.Loot
-                                               ? FilterLoot.IsChecked ?? false
-                                               : filtered;
+                        filtered = ((LogRecord) item).Type == LogRecord.LogEventTypes.Loot
+                                       ? FilterLoot.IsChecked ?? false
+                                       : filtered;
                         // зачекано ли "показывать поправки"
-                        filtered = ((LogRecord)item).Type == LogRecord.LogEventTypes.Adj
-                                               ? FilterAdj.IsChecked ?? false
-                                               : filtered;
+                        filtered = ((LogRecord) item).Type == LogRecord.LogEventTypes.Adj
+                                       ? FilterAdj.IsChecked ?? false
+                                       : filtered;
                         // зачекано ли "показывать разное"
-                        filtered =  ((LogRecord) item).Type == LogRecord.LogEventTypes.Undefined
-                                               ? FilterOther.IsChecked ?? false
-                                               : filtered;
+                        filtered = ((LogRecord) item).Type == LogRecord.LogEventTypes.Undefined
+                                       ? FilterOther.IsChecked ?? false
+                                       : filtered;
                         // зачекано ли "показывать входы/выходы из мира"
                         filtered = ((LogRecord) item).Type == LogRecord.LogEventTypes.Joined
                                    || ((LogRecord) item).Type == LogRecord.LogEventTypes.LogOutWorld
@@ -108,9 +111,9 @@ namespace AdminGUI.Resourses
                                        ? FilterLogg.IsChecked ?? false
                                        : filtered;
                         // зачекано ли "показывать события ростера"
-                        filtered = ((LogRecord)item).Type == LogRecord.LogEventTypes.Roster
-                                               ? FilterRoster.IsChecked ?? false
-                                               : filtered;
+                        filtered = ((LogRecord) item).Type == LogRecord.LogEventTypes.Roster
+                                       ? FilterRoster.IsChecked ?? false
+                                       : filtered;
 
                         return filtered;
                     };

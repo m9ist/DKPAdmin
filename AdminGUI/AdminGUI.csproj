@@ -47,20 +47,33 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WPF.MDI">
+      <HintPath>..\..\..\c#.cs\WPF.MDI.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Resourses\WindowManagementLog.xaml.cs">
+      <DependentUpon>WindowManagementLog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Resourses\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Resourses\StringToDataConverter.cs" />
+    <Page Include="Resourses\WindowManagementLog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resourses\LogRecordGUI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resourses\WindowManagementLog.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="Resourses\MainWindow.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -68,10 +81,6 @@
     </Compile>
     <Compile Include="Resourses\LogRecordGUI.xaml.cs">
       <DependentUpon>LogRecordGUI.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Resourses\WindowManagementLog.xaml.cs">
-      <DependentUpon>WindowManagementLog.xaml</DependentUpon>
-      <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>

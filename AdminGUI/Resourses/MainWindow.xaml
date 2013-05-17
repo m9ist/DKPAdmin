@@ -4,10 +4,11 @@
         xmlns:mdi="clr-namespace:WPF.MDI;assembly=WPF.MDI"
         Title="Hagakure DKP addon tools" Height="300" Width="300">
     <DockPanel>
-        <mdi:MdiContainer Name="MdiWindowContainer">
+        <mdi:MdiContainer Name="MdiWindowContainer" Theme="Aero">
             <mdi:MdiContainer.Menu>
                 <Menu DockPanel.Dock="Top">
                     <MenuItem Header="Log analyse" Click="MenuItem_LogAnalyzer"/>
+                    <MenuItem Header="Windows list" Name="MenuWindowList" />
                 </Menu>
             </mdi:MdiContainer.Menu>
         </mdi:MdiContainer>

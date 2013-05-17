@@ -7,7 +7,7 @@ using WPF.MDI;
 namespace AdminGUI.Resourses
 {
     /// <summary> вспомогательная структура для хранения связки окно - запись в меню </summary>
-    partial struct SaveWindowStructs
+    struct SaveWindowStructs
     {
         /// <summary> пункт меню, ассоциированный с данным окном </summary>
         private readonly MenuItem _mi;
@@ -48,7 +48,7 @@ namespace AdminGUI.Resourses
         public MainWindow()
         {
             InitializeComponent();
-            this.Title += string.Format(" (version {0})", Assembly.GetExecutingAssembly().GetName().Version);
+            Title += string.Format(" (version {0})", Assembly.GetExecutingAssembly().GetName().Version);
         }
 
         /// <summary> создает окошко для анализа лога </summary>
@@ -56,7 +56,7 @@ namespace AdminGUI.Resourses
         /// <param name="e"></param>
         private void MenuItem_LogAnalyzer(object sender, RoutedEventArgs e)
         {
-            string title = "Log analyse tool";
+            const string title = "Log analyse tool";
             // создаем окошко
             var tmp = new MdiChild
                 {

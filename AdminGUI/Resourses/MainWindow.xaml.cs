@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using WPF.MDI;
@@ -43,10 +44,11 @@ namespace AdminGUI.Resourses
         /// <summary> список окон и присоединенных к ним пунктов меню </summary>
         private readonly List<SaveWindowStructs> _windowList = new List<SaveWindowStructs>();
 
-        /// <summary> пустой конструктор </summary>
+        /// <summary> конструктор </summary>
         public MainWindow()
         {
             InitializeComponent();
+            this.Title += string.Format(" (version {0})", Assembly.GetExecutingAssembly().GetName().Version);
         }
 
         /// <summary> создает окошко для анализа лога </summary>

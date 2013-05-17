@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Globalization;
 
 namespace LogAnalyzer.Structures
 {
@@ -25,7 +24,7 @@ namespace LogAnalyzer.Structures
         }
 
         /// <summary> сопоставление перечислению LogEventTypes </summary>
-        private string[] _logEventTypes =
+        private readonly string[] _logEventTypes =
             {
                 "неопределено",
                 "пасс",
@@ -42,65 +41,65 @@ namespace LogAnalyzer.Structures
             };
 
         private string _user = string.Empty;
-        private int _mvalue = 0;
+        private int _mvalue;
         private string _svalue = string.Empty;
         private string _sevent = string.Empty;
-        private int _time = 0;
+        private int _time;
 
         public LogEventTypes Type { private set; get; }
 
         /// <summary> персонаж - главное лицо записи (либо ростер тут забит) </summary>
         public string User
         {
-            get { return this._user; }
+            get { return _user; }
             private set
             {
                 OnPropertyChanged("user");
-                this._user = value;
+                _user = value;
             }
         }
 
         /// <summary> зачастую значение поправки </summary>
         public int MValue
         {
-            get { return this._mvalue; }
+            get { return _mvalue; }
             private set
             {
                 OnPropertyChanged("mvalue");
-                this._mvalue = value;
+                _mvalue = value;
             }
         }
 
         /// <summary> текст поправки </summary>
         public string SValue
         {
-            get { return this._svalue; }
+            get { return _svalue; }
             private set
             {
                 OnPropertyChanged("svalue");
-                this._svalue = value;
+                _svalue = value;
             }
         }
 
         /// <summary> тип события лога </summary>
         public string SEvent
         {
-            get { return this._sevent; }
+            get { return _sevent; }
             private set
             {
                 OnPropertyChanged("sevent");
-                this._sevent = value;
+                _sevent = value;
             }
         }
 
         /// <summary> время события </summary>
         public int Time
         {
-            get { return this._time; }
+            get { return _time; }
             private set
             {
                 OnPropertyChanged("time");
-                this._time = value;
+                _time = value;
             }
         }
 
@@ -134,7 +133,6 @@ namespace LogAnalyzer.Structures
                         break;
                     default:
                         throw new Exception("It's not a log node!");
-                        break;
                 }
             }
 

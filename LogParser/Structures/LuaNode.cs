@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace LogAnalyzer
+namespace LogAnalyzer.Structures
 {
     /// <summary> сущность узла  </summary>
     public class LuaNode

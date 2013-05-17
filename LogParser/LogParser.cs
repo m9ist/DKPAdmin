@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using LogAnalyzer.Structures;
 
 namespace LogAnalyzer
 {

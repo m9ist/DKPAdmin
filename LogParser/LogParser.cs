@@ -24,7 +24,7 @@ namespace LogAnalyzer
         {
             // очищаем от спец символов
             string iteration = _emptyChars.Aggregate(data, (current, s) => current.Replace(s, string.Empty));
-            
+
             // убиваем последний @"{"
             return iteration.Substring(0, iteration.Length - 1);
         }
@@ -58,7 +58,7 @@ namespace LogAnalyzer
 
                 // если открытие идет раньше, то значит текущий узел - это node и надо дальше отдавать на 
                 // распарсинг вычитая начало строки и распарсивая имя если есть
-                if (nextOpen > -1 && nextClose > nextOpen && nextComma > nextOpen)
+                if (nextOpen > -1 && nextClose > nextOpen && (nextComma == -1 || nextComma > nextOpen))
                 {
                     // вытаскиваем с начала имя есть есть
                     string name = data.Substring(0, nextOpen);
@@ -73,7 +73,8 @@ namespace LogAnalyzer
                         throw new Exception("Some error in parsing!");
 
                     // убиваем закрывающуюся скобку
-                    data = data.Substring(data.IndexOf(@"},", StringComparison.Ordinal) + 2, data.Length - data.IndexOf(@"},", StringComparison.Ordinal) - 2);
+                    data = data.Substring(data.IndexOf(@"},", StringComparison.Ordinal) + 2,
+                                          data.Length - data.IndexOf(@"},", StringComparison.Ordinal) - 2);
 
                     // если в начале было пустое имя, вытаскиваем его из конца
                     if (name == string.Empty)
@@ -96,14 +97,15 @@ namespace LogAnalyzer
                     // добавляем узел с указанным именем
                     result.AddValue(toAdd);
                 }
-                else if (nextComma > 0 && (nextClose == -1 || nextClose > nextComma))// если сначала идет запятая, те у нас строка типа ["name"] = value,
+                else if (nextComma > 0 && (nextClose == -1 || nextClose > nextComma))
+                    // если сначала идет запятая, те у нас строка типа ["name"] = value,
                 {
                     // у нас выражение типа ["name"] = value,
                     int nameStarts = data.IndexOf("\"", StringComparison.Ordinal);
                     int nameEnds = data.IndexOf("\"", nameStarts + 1, StringComparison.Ordinal);
                     int equalPlace = data.IndexOf(" = ", StringComparison.Ordinal);
 
-                    // если что-то не так выдаем эксепшн
+                    // если у нас в вытащенном (теоретически) ["name"] = нет всего этого выдаем эксепшн
                     if (nameStarts == -1 || nameEnds == -1 || equalPlace == -1)
                         throw new Exception("Wrong format for text string!");
 
@@ -168,12 +170,12 @@ namespace LogAnalyzer
         public LuaNode SearchNodeWithName(LuaNode data, string nodeName)
         {
             return data.NodeName == nodeName
-                        // если искомая ветка искомая - выдаем ее на результат
+                       // если искомая ветка искомая - выдаем ее на результат
                        ? data
                        : data.NodeType != LuaNode.LuaNodeType.Node
-                                // если узел не содержит внутри узел то выдаем null
+                             // если узел не содержит внутри узел то выдаем null
                              ? null
-                                // иначе надо запустить на проверку каждый его член ^^
+                             // иначе надо запустить на проверку каждый его член ^^
                              : data.GetNodeContent()
                                    .Select(iNode => SearchNodeWithName(iNode, nodeName))
                                    .FirstOrDefault(search => search != null);

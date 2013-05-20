@@ -7,15 +7,6 @@ namespace LogAnalyzer.Structures
     /// <summary> сущность узла  </summary>
     public class LuaNode
     {
-        /// <summary> тип узла </summary>
-        private LuaNodeType _type;
-
-        /// <summary> содержание узла, здесь будет ссылка на значение, которое при извлечении надо распаковывать </summary>
-        private object _content;
-
-        /// <summary> имя узла / название параметра </summary>
-        public string NodeName;
-
         /// <summary> предопределенные типы для значения узла </summary>
         public enum LuaNodeType
         {
@@ -26,6 +17,15 @@ namespace LogAnalyzer.Structures
             Node,
             Empty
         };
+
+        /// <summary> имя узла / название параметра </summary>
+        public string NodeName;
+
+        /// <summary> содержание узла, здесь будет ссылка на значение, которое при извлечении надо распаковывать </summary>
+        private object _content;
+
+        /// <summary> тип узла </summary>
+        private LuaNodeType _type;
 
         /// <summary> конструктор, по умолчанию задает узел пустым </summary>
         public LuaNode()
@@ -86,21 +86,22 @@ namespace LogAnalyzer.Structures
         /// <returns> null если контент другого типа </returns>
         public bool? GetBoolContent()
         {
-            return _type == LuaNodeType.Boolean 
+            return _type == LuaNodeType.Boolean
                        ? (bool) _content
                        : (bool?) null;
         }
 
         /// <summary> выдает контент типа real </summary>
         /// <returns> null если контент другого типа </returns>
-        public float? GetRealContent()
+        public double? GetRealContent()
         {
             return _type == LuaNodeType.Real
-                       ? (float) _content
-                       : (float?) null;
+                       ? (double)_content
+                       : (double?)null;
         }
 
         #region перегрузка AddValue(value)
+
         /// <summary> задает/добавляет значение для узла </summary>
         /// <param name="value"> значение узла </param>
         public void AddValue(int value)
@@ -131,10 +132,11 @@ namespace LogAnalyzer.Structures
         {
             if (_type == LuaNodeType.Node)
             {
-                ((List<LuaNode>)_content).Add(value);
+                ((List<LuaNode>) _content).Add(value);
             }
             else throw new Exception("У узла выставлен другой тип данных (не node).");
         }
+
         #endregion
     }
 }

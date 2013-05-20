@@ -36,15 +36,62 @@ namespace LogAnalyzer.Structures
                 "рейд",
                 "инв",
                 "онлайн",
-                "ростер", 
+                "ростер",
                 "присоединился"
             };
 
-        private string _user = string.Empty;
         private int _mvalue;
-        private string _svalue = string.Empty;
         private string _sevent = string.Empty;
+        private string _svalue = string.Empty;
         private int _time;
+        private string _user = string.Empty;
+
+        /// <summary> создает экземпляр записи лога </summary>
+        /// <param name="logNode"> ветка в которой содержится запись лога </param>
+        public LogRecord(LuaNode logNode)
+        {
+            // проверяем что нам досталось
+            if (logNode.NodeType != LuaNode.LuaNodeType.Node)
+                throw new Exception("Wrong input LuaNode, it should be Node type");
+
+            // забиваем наши поля
+            foreach (LuaNode iNode in logNode.GetNodeContent())
+            {
+                switch (iNode.NodeName)
+                {
+                    case "m_value":
+                        MValue = iNode.GetIntContent() ?? 0;
+                        break;
+                    case "user":
+                        User = iNode.GetStringContent();
+                        break;
+                    case "t":
+                        Time = iNode.GetIntContent() ?? 0;
+                        break;
+                    case "s_value":
+                        SValue = iNode.GetStringContent();
+                        break;
+                    case "event":
+                        SEvent = iNode.GetStringContent();
+                        break;
+                    default:
+                        throw new Exception("It's not a log node!");
+                }
+            }
+
+            // определяем тип поля
+            for (int i = 0; i < _logEventTypes.Length; i++)
+            {
+                if (_sevent.IndexOf(_logEventTypes[i], StringComparison.InvariantCulture) >= 0)
+                    Type = (LogEventTypes) i;
+            }
+        }
+
+        public LogRecord(LuaNode logNode, int firstTime)
+            : this(logNode)
+        {
+            Time = Time - firstTime;
+        }
 
         public LogEventTypes Type { private set; get; }
 
@@ -101,53 +148,6 @@ namespace LogAnalyzer.Structures
                 OnPropertyChanged("time");
                 _time = value;
             }
-        }
-
-        /// <summary> создает экземпляр записи лога </summary>
-        /// <param name="logNode"> ветка в которой содержится запись лога </param>
-        public LogRecord(LuaNode logNode)
-        {
-            // проверяем что нам досталось
-            if (logNode.NodeType != LuaNode.LuaNodeType.Node)
-                throw new Exception("Wrong input LuaNode, it should be Node type");
-
-            // забиваем наши поля
-            foreach (var iNode in logNode.GetNodeContent())
-            {
-                switch (iNode.NodeName)
-                {
-                    case "m_value":
-                        MValue = iNode.GetIntContent() ?? 0;
-                        break;
-                    case "user":
-                        User = iNode.GetStringContent();
-                        break;
-                    case "t":
-                        Time = iNode.GetIntContent() ?? 0;
-                        break;
-                    case "s_value":
-                        SValue = iNode.GetStringContent();
-                        break;
-                    case "event":
-                        SEvent = iNode.GetStringContent();
-                        break;
-                    default:
-                        throw new Exception("It's not a log node!");
-                }
-            }
-
-            // определяем тип поля
-            for (int i = 0; i < _logEventTypes.Length; i++)
-            {
-                if (_sevent.IndexOf(_logEventTypes[i], StringComparison.InvariantCulture) >= 0)
-                    Type = (LogEventTypes)i;
-            }
-        }
-
-        public LogRecord(LuaNode logNode, int firstTime)
-            : this(logNode)
-        {
-            Time = Time - firstTime;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

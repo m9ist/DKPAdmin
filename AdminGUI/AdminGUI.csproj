@@ -63,6 +63,9 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Resourses\StringToDataConverter.cs" />
+    <Compile Include="Resourses\XmlOutputWindow.xaml.cs">
+      <DependentUpon>XmlOutputWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="Resourses\WindowManagementLog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -82,6 +85,10 @@
     <Compile Include="Resourses\LogRecordGUI.xaml.cs">
       <DependentUpon>LogRecordGUI.xaml</DependentUpon>
     </Compile>
+    <Page Include="Resourses\XmlOutputWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

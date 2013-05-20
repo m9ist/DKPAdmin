@@ -8,6 +8,7 @@
             <mdi:MdiContainer.Menu>
                 <Menu DockPanel.Dock="Top">
                     <MenuItem Header="Log analyse" Click="MenuItem_LogAnalyzer"/>
+                    <MenuItem Header="XML output" Click="MenuItem_XmlOutput"/>
                     <MenuItem Header="Windows list" Name="MenuWindowList" />
                 </Menu>
             </mdi:MdiContainer.Menu>

@@ -108,5 +108,22 @@ namespace AdminGUI.Resourses
                 _windowList.Remove((SaveWindowStructs) savedStruct);
             }
         }
+
+        /// <summary> создает окошко по выводу XML файла </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MenuItem_XmlOutput(object sender, RoutedEventArgs e)
+        {
+            const string title = "XML output";
+            // создаем окошко
+            var tmp = new MdiChild
+            {
+                Content = new XmlOutputWindow(),
+                Title = title,
+                MinimizeBox = false
+            };
+            // добавляем на экран
+            AddNewWindow(tmp, title);
+        }
     }
 }

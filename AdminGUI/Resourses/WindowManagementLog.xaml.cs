@@ -18,9 +18,9 @@ namespace AdminGUI.Resourses
         private readonly LogParser _logParser = new LogParser();
 
         /// <summary> путь до файла .lua </summary>
-        private const string _inpData = @"C:\!Data\GitHub\DKPAdmin\Tests\hagakure.lua";
+        //private const string _inpData = @"C:\!Data\GitHub\DKPAdmin\Tests\hagakure.lua";
+        private const string _inpData = @"D:\WoW\WTF\Account\N00BE\SavedVariables\hagakure.lua";
 
-        //private const string _inpData = @"D:\WoW\WTF\Account\N00BE\SavedVariables\hagakure.lua";
         /// <summary> коллекция для хранения загруженного лога </summary>
         private readonly ObservableCollection<LogRecord> _log;
 

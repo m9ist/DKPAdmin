@@ -8,8 +8,8 @@
     <UserControl.Resources>
         <src:StringToDataConverter x:Key="StringToDataConverter" />
     </UserControl.Resources>
-    <StackPanel Orientation="Horizontal" >
-        <Label Content="{Binding Path=Time, Converter={StaticResource StringToDataConverter}}"  />
+    <StackPanel Orientation="Horizontal">
+        <Label Content="{Binding Path=Time}"  />
         <Label Content="{Binding Path=User}" />
         <Label Content="{Binding Path=MValue}" />
         <Label Content="{Binding Path=SEvent}" />

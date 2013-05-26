@@ -180,5 +180,25 @@ namespace LogAnalyzer
                                    .Select(iNode => SearchNodeWithName(iNode, nodeName))
                                    .FirstOrDefault(search => search != null);
         }
+
+        /// <summary> конвертация wow time => real time </summary>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public static DateTime ConvertWowTime(int time)
+        {
+            // константа - разница в timespam с 01.01.2013 00:00:00
+            int diffWith20130101 = (15705*24 + 17)*60*60;
+
+            int diff = time - diffWith20130101;
+            int sec = diff%60;
+            int min = ((diff - sec)/60)%60;
+            int hour = (((diff - sec)/60 - min)/60)%24;
+            int day = (((diff - sec)/60 - min)/60 - hour)/24;
+
+            var date20130101 = new DateTime(2013, 01, 01, 00, 00, 00);
+            var outdate = date20130101.AddDays(day).AddHours(hour).AddMinutes(min).AddSeconds(sec);
+
+            return outdate;
+        }
     }
 }

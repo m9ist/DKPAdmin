@@ -19,7 +19,8 @@ namespace AdminGUI.Resourses
 
         /// <summary> путь до файла .lua </summary>
         //private const string _inpData = @"C:\!Data\GitHub\DKPAdmin\Tests\hagakure.lua";
-        private const string _inpData = @"D:\WoW\WTF\Account\N00BE\SavedVariables\hagakure.lua";
+        //private const string _inpData = @"D:\WoW\WTF\Account\N00BE\SavedVariables\hagakure.lua";
+        private const string _inpData = @"E:\!data\GitHub\DKPAdmin\hagakure.lua";
 
         /// <summary> коллекция для хранения загруженного лога </summary>
         private readonly ObservableCollection<LogRecord> _log;
@@ -62,18 +63,9 @@ namespace AdminGUI.Resourses
             // очищаем предыдущую подгрзку если есть и преобразовываем распарсенный лог
             // в нужный нам вид
             _log.Clear();
-            // переменная под первый timespam
-            int firstTime = 0;
             foreach (var iNode in search.GetNodeContent())
             {
-                if (firstTime == 0)
-                {
-                    var rec = new LogRecord(iNode);
-                    firstTime = rec.Time;
-                    _log.Add(rec);
-                }
-                else
-                    _log.Add(new LogRecord(iNode, firstTime));
+                _log.Add(new LogRecord(iNode));
             }
             FilterPassEvent(this, new RoutedEventArgs());
         }

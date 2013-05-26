@@ -43,7 +43,7 @@ namespace LogAnalyzer.Structures
         private int _mvalue;
         private string _sevent = string.Empty;
         private string _svalue = string.Empty;
-        private int _time;
+        private DateTime _time;
         private string _user = string.Empty;
 
         /// <summary> создает экземпляр записи лога </summary>
@@ -66,7 +66,7 @@ namespace LogAnalyzer.Structures
                         User = iNode.GetStringContent();
                         break;
                     case "t":
-                        Time = iNode.GetIntContent() ?? 0;
+                        Time = LogParser.ConvertWowTime(iNode.GetIntContent() ?? 0);
                         break;
                     case "s_value":
                         SValue = iNode.GetStringContent();
@@ -85,12 +85,6 @@ namespace LogAnalyzer.Structures
                 if (_sevent.IndexOf(_logEventTypes[i], StringComparison.InvariantCulture) >= 0)
                     Type = (LogEventTypes) i;
             }
-        }
-
-        public LogRecord(LuaNode logNode, int firstTime)
-            : this(logNode)
-        {
-            Time = Time - firstTime;
         }
 
         public LogEventTypes Type { private set; get; }
@@ -140,7 +134,7 @@ namespace LogAnalyzer.Structures
         }
 
         /// <summary> время события </summary>
-        public int Time
+        public DateTime Time
         {
             get { return _time; }
             private set

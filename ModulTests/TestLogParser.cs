@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using LogAnalyzer.Structures;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -154,5 +155,22 @@ namespace ModulTests
         // 1369342024 24,05,2013 03,47,04
         // 1369340890 24.05.13 03.28.10
         // 1368992269 20.05.13 02.37.49
+        [TestMethod]
+        public void TestAnalyzeLuaString_TestTimeConvert()
+        {
+            var tests = new Dictionary<int, DateTime>
+                {
+                    {1369342447, new DateTime(2013, 05, 24, 03, 54, 07)},
+                    {1369342024, new DateTime(2013, 05, 24, 03, 47, 04)},
+                    {1369340890, new DateTime(2013, 05, 24, 03, 28, 10)},
+                    {1368992269, new DateTime(2013, 05, 20, 02, 37, 49)}
+                };
+
+            foreach (var pair in tests)
+            {
+                Assert.IsTrue(pair.Value.Equals(LogParser.ConvertWowTime(pair.Key)));
+            }
+            //Assert.IsTrue(t_.Equals(t));
+        }
     }
 }

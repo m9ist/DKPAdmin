@@ -26,7 +26,7 @@ namespace LogAnalyzer.Structures
         }
 
         /// <summary> сопоставление перечислению LogEventTypes </summary>
-        private Dictionary<LogEventTypes, string> _logEvents = new Dictionary<LogEventTypes, string>
+        private readonly Dictionary<LogEventTypes, string> _logEvents = new Dictionary<LogEventTypes, string>
             {
                 {LogEventTypes.Undefined, "неопределено"},
                 {LogEventTypes.Pass, "пасс"},

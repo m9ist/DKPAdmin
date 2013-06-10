@@ -2,7 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mdi="clr-namespace:WPF.MDI;assembly=WPF.MDI"
-        Title="Hagakure DKP addon tools" Height="300" Width="300">
+        Title="Hagakure DKP addon tools" Height="300" Width="300"
+        WindowState="Maximized">
     <DockPanel>
         <mdi:MdiContainer Name="MdiWindowContainer" Theme="Aero">
             <mdi:MdiContainer.Menu>

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace LogAnalyzer.Structures
 {
@@ -24,21 +26,22 @@ namespace LogAnalyzer.Structures
         }
 
         /// <summary> сопоставление перечислению LogEventTypes </summary>
-        private readonly string[] _logEventTypes =
+        private Dictionary<LogEventTypes, string> _logEvents = new Dictionary<LogEventTypes, string>
             {
-                "неопределено",
-                "пасс",
-                "лут",
-                "поправка",
-                "входит",
-                "выходит",
-                "член",
-                "рейд",
-                "инв",
-                "онлайн",
-                "ростер",
-                "присоединился"
+                {LogEventTypes.Undefined, "неопределено"},
+                {LogEventTypes.Pass, "пасс"},
+                {LogEventTypes.Loot, "лут"},
+                {LogEventTypes.Adj, "поправка"},
+                {LogEventTypes.EnterWorld, "входит"},
+                {LogEventTypes.LogOutWorld, "выходит"},
+                {LogEventTypes.RaidMember, "член"},
+                {LogEventTypes.RaidEvent, "рейд"},
+                {LogEventTypes.Invite, "инв"},
+                {LogEventTypes.Online, "онлайн"},
+                {LogEventTypes.Roster, "ростер"},
+                {LogEventTypes.Joined, "присоединился"}
             };
+
 
         private int _mvalue;
         private string _sevent = string.Empty;
@@ -80,11 +83,7 @@ namespace LogAnalyzer.Structures
             }
 
             // определяем тип поля
-            for (int i = 0; i < _logEventTypes.Length; i++)
-            {
-                if (_sevent.IndexOf(_logEventTypes[i], StringComparison.InvariantCulture) >= 0)
-                    Type = (LogEventTypes) i;
-            }
+            Type = _logEvents.SingleOrDefault(i => _sevent.IndexOf(i.Value, StringComparison.InvariantCulture) >= 0).Key;
         }
 
         public LogEventTypes Type { private set; get; }
